@@ -2,8 +2,8 @@
 
 This page explains two things:
 
-1. **How weights decide what becomes a wiki page** — the scoring math.
-2. **How weights change over time** — what `neuron filter evolve` does and why.
+1. **How weights decide what becomes a wiki page**: the scoring math.
+2. **How weights change over time**: what `neuron filter evolve` does and why.
 
 If you only read one section, read [The scoring formula](#the-scoring-formula).
 
@@ -12,7 +12,7 @@ If you only read one section, read [The scoring formula](#the-scoring-formula).
 ## What a weight is
 
 Your identity filter (`~/.agents-neuron/filter-identity.md`) lists the topics you
-care about. Each topic is a **dimension**. Each dimension has a **weight** — a
+care about. Each topic is a **dimension**. Each dimension has a **weight**, a
 number that says how much that topic counts toward keeping a source.
 
 ```
@@ -41,7 +41,7 @@ Two rules govern the weights:
 
 When a source is scored (during `neuron ingest`, or manually with
 `neuron filter score`), every dimension gets a **relevance rating** from `0.0`
-to `1.0` — "how much is this source about that topic?" Then:
+to `1.0`: "how much is this source about that topic?" Then:
 
 ```
 score = Σ (rating × weight)   for every dimension
@@ -106,19 +106,19 @@ with the wiki, instead of what you guessed you'd care about.
 
 From that evidence it suggests four kinds of change:
 
-1. **Boost an underweighted dimension** — you query it often, but its weight is
+1. **Boost an underweighted dimension**: you query it often, but its weight is
    low, so good sources keep getting skipped.
-2. **Trim an overweighted dimension** — high weight, but no queries, no new
+2. **Trim an overweighted dimension**: high weight, but no queries, no new
    pages, no backlinks in a long stretch.
-3. **Add a missing dimension** — a topic shows up in sources or queries that no
+3. **Add a missing dimension**: a topic shows up in sources or queries that no
    existing dimension captures.
-4. **Adjust the threshold** — lower it if useful sources are being filtered out;
+4. **Adjust the threshold**: lower it if useful sources are being filtered out;
    raise it if the wiki is getting noisy.
 
 A proposal looks like this:
 
 ```markdown
-## Filter Evolution Proposal — 2026-06-27
+## Filter Evolution Proposal: 2026-06-27
 
 ### Evidence Summary
 - Analyzed: 42 queries, 118 wiki pages, 9 skipped sources
@@ -144,9 +144,9 @@ A proposal looks like this:
 `neuron filter evolve` **never edits the filter on its own.** It prints the
 proposal and waits. Then:
 
-- **Approve all** — every change is written to `filter-identity.md`.
-- **Approve some** — only the changes you accept are written.
-- **Reject** — nothing changes.
+- **Approve all**: every change is written to `filter-identity.md`.
+- **Approve some**: only the changes you accept are written.
+- **Reject**: nothing changes.
 
 Whatever you decide, an entry is appended to the **evolution log** at the bottom
 of `filter-identity.md` so you have a dated history of how the filter drifted.
@@ -166,7 +166,7 @@ These invariants hold no matter what evolve proposes:
 
 The forward-only rule is the important one: tightening your filter will **not**
 purge pages you already have. If you want old low-value pages gone, remove them
-yourself — `neuron lint` will help you find stale and orphaned ones.
+yourself; `neuron lint` will help you find stale and orphaned ones.
 
 ---
 
@@ -191,7 +191,7 @@ A good manual cadence is **monthly**, alongside `neuron lint`.
 
 ## Related
 
-- [Configuration → Identity filter](configuration.md#identity-filter) — how to
+- [Configuration → Identity filter](configuration.md#identity-filter): how to
   write and seed `filter-identity.md`.
-- [Commands](commands.md) — the full `neuron filter` command reference.
-- [Architecture](architecture.md) — where the filter sits in the pipeline.
+- [Commands](commands.md): the full `neuron filter` command reference.
+- [Architecture](architecture.md): where the filter sits in the pipeline.
