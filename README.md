@@ -91,6 +91,7 @@ Pair with `neuron scan` in your morning terminal session to pull overnight note 
 
 | Doc | Contents |
 |-----|----------|
+| [AI Install Guide](docs/ai-install.md) | Step-by-step runbook for an AI agent to install + configure Neuron on a user's machine |
 | [Commands](docs/commands.md) | Full command reference, daily usage patterns, recommended cadence |
 | [Configuration](docs/configuration.md) | config.yaml, identity filter setup, scoring dimensions |
 | [Architecture](docs/architecture.md) | File structure, scripts vs LLM split, page types, cross-platform support |
