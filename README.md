@@ -79,7 +79,7 @@ Pair with `neuron scan` in your morning terminal session to pull overnight note 
 | Command | What it does |
 |---------|-------------|
 | `neuron scan` | Pull recently modified vault notes into the wiki |
-| `neuron add <url|text>` | Import a single source |
+| `neuron add <url\|text>` | Import a single source |
 | `neuron ingest` | Score pending sources, create wiki pages |
 | `neuron query <question>` | Answer from wiki with citations |
 | `neuron lint` | Health check |
