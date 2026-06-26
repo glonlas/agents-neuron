@@ -55,6 +55,29 @@ assert_match    "entity type emits 'entities=' key" "entities=1" "$OUT"
 assert_no_match "no malformed 'entitys=' key"        "entitys="   "$OUT"
 assert_match    "concept type emits 'concepts=' key" "concepts=1" "$OUT"
 
+# An ingested source whose ONLY remaining frontmatter field is an EMPTY
+# "wiki_pages:" sitting directly above the closing "---" must count as skipped.
+# The "---" delimiter also matches /^ *-/, so a naive "next line is a list item?"
+# check mistakes the empty field for a populated array and undercounts skipped.
+cat > "${SANDBOX}/vault/Neuron-Sources/skipped.md" <<'EOF'
+---
+title: "Skipped Source"
+source_type: text
+imported: 2026-01-01
+ingested: true
+relevance_score: 0.9
+wiki_pages:
+---
+Body.
+EOF
+
+echo ""
+echo "wiki-stats: empty wiki_pages before closing delimiter counts as skipped"
+OUT="$(HOME="${SANDBOX}/home" bash "$STATS" 2>&1)"
+
+assert_match "ingested source with empty wiki_pages is counted skipped" \
+    "skipped_sources=1" "$OUT"
+
 # --- Summary ---
 echo ""
 printf "  %d passed, %d failed\n" "$pass" "$fail"

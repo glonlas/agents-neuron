@@ -73,7 +73,11 @@ run_orphan_sources() {
         [ "$ingested" != "true" ] && continue
         wiki_pages=$(sed -n 's/^wiki_pages: *\(.*\)/\1/p' "$f" | head -1)
         if [ -z "$wiki_pages" ] && grep -q '^wiki_pages:' "$f"; then
-            grep -A1 '^wiki_pages:' "$f" | tail -1 | grep -q '^ *-' && wiki_pages="(array)"
+            # Peek at the line after "wiki_pages:" for a YAML list item. Exclude
+            # the closing "---" delimiter, which also matches /^ *-/ but means the
+            # field is genuinely empty, not an array (mirrors fm_value above).
+            next_line=$(grep -A1 '^wiki_pages:' "$f" | tail -1)
+            [ "$next_line" != "---" ] && printf '%s\n' "$next_line" | grep -q '^ *-' && wiki_pages="(array)"
         fi
         score=$(sed -n 's/^relevance_score: *\(.*\)/\1/p' "$f" | head -1)
         if [ "$wiki_pages" = "[]" ] || [ -z "$wiki_pages" ]; then

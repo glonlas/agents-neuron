@@ -85,6 +85,29 @@ OUT="$(HOME="${SANDBOX}/home" bash "$LINT" frontmatter 2>&1)"
 assert_match "empty 'tags:' before '---' is flagged as missing" \
     "Empty Tags.md	missing: tags" "$OUT"
 
+# An ingested, above-threshold source whose "wiki_pages:" is empty and sits
+# directly above the closing "---" is a genuine orphan. The "---" delimiter
+# matches /^ *-/, so a naive list-item peek mistakes the empty field for a
+# populated array and the orphan goes unreported.
+cat > "${SANDBOX}/vault/Neuron-Sources/orphan.md" <<'EOF'
+---
+title: "Orphan Source"
+source_type: text
+imported: 2026-01-01
+ingested: true
+relevance_score: 0.9
+wiki_pages:
+---
+Body.
+EOF
+
+echo ""
+echo "lint-checks: orphan source with empty wiki_pages before delimiter"
+OUT="$(HOME="${SANDBOX}/home" bash "$LINT" orphans 2>&1)"
+
+assert_match "ingested above-threshold source with empty wiki_pages is flagged orphan" \
+    "orphan.md" "$OUT"
+
 # --- Summary ---
 echo ""
 printf "  %d passed, %d failed\n" "$pass" "$fail"
