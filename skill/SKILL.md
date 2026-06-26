@@ -21,7 +21,7 @@ Before doing anything, read the config file to know where the vault is:
 
 Where `CONFIG_DIR` is `~/.agents-neuron` (the user's personal config directory, outside the skill repo).
 
-`SKILL_DIR` is the directory containing this SKILL.md file (the skill repo root, e.g. `~/dev/skills/agents-neuron`). Use it only for reading skill instruction files under `skills/` and `references/`.
+`SKILL_DIR` is the directory containing this SKILL.md file (the skill repo root, wherever the user cloned it — e.g. `~/agents-neuron`). Use it only for reading skill instruction files under `skills/` and `references/`.
 
 ## Command Routing
 

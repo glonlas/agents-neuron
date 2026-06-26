@@ -49,19 +49,21 @@ First determine whether the repo is already on disk. Do **not** clone if it alre
 # Are we already inside the repo? (look for the skill marker)
 test -f skill/SKILL.md && grep -q "^name: neuron" skill/SKILL.md && echo "ALREADY IN REPO: $(pwd)"
 
-# Is it cloned elsewhere? (common locations)
-ls -d ~/dev/skills/neuron ~/dev/skills/agents-neuron ~/agents-neuron 2>/dev/null
+# Is it cloned elsewhere? Search under the home directory for the skill marker.
+# (Do not assume any particular folder layout — discover it.)
+find ~ -maxdepth 4 -type f -name SKILL.md -path "*/skill/SKILL.md" 2>/dev/null \
+  | xargs -I{} dirname {} | xargs -I{} dirname {}
 ```
 
 - **If found**, `cd` into the repo root (the directory containing the `Makefile` and `skill/`) and skip to Step 2.
 - **If not found**, clone it. Canonical remote:
 
 ```sh
-git clone https://github.com/glonlas/agents-neuron.git ~/dev/skills/neuron
-cd ~/dev/skills/neuron
+git clone https://github.com/glonlas/agents-neuron.git ~/agents-neuron
+cd ~/agents-neuron
 ```
 
-> **ASK** the user only if `~/dev/skills/` is not their preferred location. Otherwise use it as the default — the install symlinks point back to wherever the repo lives, so the path just needs to be stable (don't put it in `/tmp` or a temp worktree).
+> **ASK** the user where to clone it if they have a preferred location for source repos. Otherwise default to `~/agents-neuron` (home directory) — pick whatever the user actually uses; do not assume any particular folder layout. The install symlinks point back to wherever the repo lives, so the path just needs to be stable (don't put it in `/tmp` or a temp worktree).
 
 Confirm you are at the repo root before continuing:
 
