@@ -145,6 +145,14 @@ Present the proposed changes clearly:
 - {N} currently pending sources would change scoring.
 ```
 
+After presenting the proposal, record that the evolve pass ran so the weekly TTL
+gate (used by `neuron add`) knows it is up to date:
+```sh
+SKILL_DIR/scripts/auto-maintenance.sh touch evolve
+```
+Do this whether or not the user ends up approving changes — the weekly pass has
+run; resetting the timer prevents it from re-triggering on every subsequent add.
+
 ### Step 4: Apply (with approval)
 
 **CRITICAL: Do NOT apply changes automatically.** Wait for the user to approve.

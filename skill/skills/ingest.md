@@ -151,6 +151,16 @@ Ingested 2 sources:
 Wiki now has: 2 entities, 1 concept, 0 topics, 0 recipes, 0 comparisons
 ```
 
+## Step 8: Record the run timestamp
+
+After reporting, record that ingest ran so the daily TTL gate (used by
+`neuron add`) knows it is up to date:
+```sh
+SKILL_DIR/scripts/auto-maintenance.sh touch ingest
+```
+Do this on every completed ingest — manual or auto-triggered — even if there
+were no pending sources to process.
+
 ## Conflict Handling
 
 If a source contradicts information in an existing wiki page:
