@@ -26,13 +26,28 @@ Inspired by [Karpathy's original write-up](https://gist.github.com/karpathy/442a
 
 ## Getting started
 
-**Prerequisites:** [Claude Code](https://claude.ai/code), Bash 4+
+**Prerequisites:** an AI coding agent (Claude Code, Codex, or OpenCode) on macOS or Linux
+
+### Install with your AI agent (recommended)
+
+Paste this prompt into Claude Code, Codex, or OpenCode and let it install Neuron for you — it follows the [AI Install Guide](docs/ai-install.md) end to end (clone, symlink, config, bootstrap, validate):
+
+```text
+Install the Agents Neuron skill for me. Clone https://github.com/glonlas/agents-neuron
+(skip if it's already on disk), then read its docs/ai-install.md and follow that runbook
+step by step on this machine. Ask me for my Obsidian vault path when you reach that step,
+and run the doctor script at the end to confirm the install succeeded.
+```
+
+The agent will pause to ask for your Obsidian vault path; everything else is automated.
+
+### Install manually
 
 ```sh
-git clone https://github.com/glonlas/neuron.git && cd neuron
+git clone https://github.com/glonlas/agents-neuron.git && cd agents-neuron
 make install                        # symlinks + seed ~/.agents-neuron/ config
 # Edit ~/.agents-neuron/config.yaml # set vault_path
-neuron bootstrap                      # run in Claude Code to init vault
+neuron bootstrap                      # run in your AI agent to init vault
 ```
 
 Validate: `skill/scripts/doctor.sh` | Uninstall: `make uninstall`
@@ -48,6 +63,32 @@ neuron ingest
 ```
 
 Agents Neuron fetches the thread, scores it against your identity filter, and — if it clears your relevance threshold — creates a structured wiki page (e.g. `Neuron/Comparisons/GGUF llama.cpp vs MLX.md`) with inline citations back to the source.
+
+---
+
+## Quick reference
+
+| Command | What it does |
+|---------|-------------|
+| `neuron scan` | Pull recently modified vault notes into the wiki |
+| `neuron add <url\|text>` | Import a single source |
+| `neuron ingest` | Score pending sources, create wiki pages |
+| `neuron query <question>` | Answer from wiki with citations |
+| `neuron lint` | Health check |
+| `neuron filter evolve` | Tune relevance weights from usage patterns |
+
+---
+
+## Documentation
+
+| Doc | Contents |
+|-----|----------|
+| [AI Install Guide](docs/ai-install.md) | Step-by-step runbook for an AI agent to install + configure Neuron on a user's machine |
+| [Commands](docs/commands.md) | Full command reference, daily usage patterns, recommended cadence |
+| [Configuration](docs/configuration.md) | config.yaml, identity filter setup, scoring dimensions |
+| [Architecture](docs/architecture.md) | File structure, scripts vs LLM split, page types, cross-platform support |
+| [Troubleshooting](docs/troubleshooting.md) | Common errors and doctor.sh |
+| [Contributing](CONTRIBUTING.md) | How to add skills, scripts, and submit PRs |
 
 ---
 
@@ -71,31 +112,6 @@ Installs three agents: daily `neuron ingest` at 08:00, weekly `neuron lint` and 
 ```
 
 Pair with `neuron scan` in your morning terminal session to pull overnight note changes.
-
----
-
-## Quick reference
-
-| Command | What it does |
-|---------|-------------|
-| `neuron scan` | Pull recently modified vault notes into the wiki |
-| `neuron add <url\|text>` | Import a single source |
-| `neuron ingest` | Score pending sources, create wiki pages |
-| `neuron query <question>` | Answer from wiki with citations |
-| `neuron lint` | Health check |
-| `neuron filter evolve` | Tune relevance weights from usage patterns |
-
----
-
-## Documentation
-
-| Doc | Contents |
-|-----|----------|
-| [Commands](docs/commands.md) | Full command reference, daily usage patterns, recommended cadence |
-| [Configuration](docs/configuration.md) | config.yaml, identity filter setup, scoring dimensions |
-| [Architecture](docs/architecture.md) | File structure, scripts vs LLM split, page types, cross-platform support |
-| [Troubleshooting](docs/troubleshooting.md) | Common errors and doctor.sh |
-| [Contributing](CONTRIBUTING.md) | How to add skills, scripts, and submit PRs |
 
 ---
 
