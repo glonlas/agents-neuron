@@ -6,7 +6,16 @@ CONFIG_DIR  := $(HOME)/.agents-neuron
 AGENTS_SKILLS := $(HOME)/.agents/skills
 CLAUDE_SKILLS := $(HOME)/.claude/skills
 
-.PHONY: install setup uninstall
+.PHONY: install setup uninstall test
+
+test:
+	@fail=0; \
+	for t in "$(REPO_DIR)"/tests/test-*.sh; do \
+		[ -f "$$t" ] || continue; \
+		echo "==> $$t"; \
+		bash "$$t" || fail=1; \
+	done; \
+	exit $$fail
 
 install: setup
 	@echo ""

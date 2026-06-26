@@ -24,9 +24,14 @@ REQUIRED_FIELDS="title type created updated sources tags"
 
 # ---------- helpers ----------
 
-# Extract all [[...]] wikilinks from a file (content + frontmatter)
+# Extract all [[...]] wikilinks from a file (content + frontmatter).
+# Strips the |display alias and any #heading / ^block anchor so the link
+# resolves to its target page (Obsidian treats [[Page#Heading]] as Page).
 extract_wikilinks() {
-    grep -oE '\[\[[^]]+\]\]' "$1" 2>/dev/null | sed 's/\[\[//;s/\]\]//' | sed 's/|.*//' | sort -u
+    grep -oE '\[\[[^]]+\]\]' "$1" 2>/dev/null \
+        | sed 's/\[\[//;s/\]\]//' \
+        | sed 's/|.*//;s/#.*//;s/\^.*//' \
+        | sort -u
 }
 
 # Check if a wikilink target exists as a file in the vault
