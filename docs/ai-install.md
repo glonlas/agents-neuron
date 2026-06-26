@@ -1,19 +1,21 @@
 # AI Install Guide
 
-> **Audience: an AI coding agent (e.g. Claude Code).**
+> **Audience: an AI coding agent (Claude Code, Codex, OpenCode, or any agent that loads AI Skills).**
 > This is a runbook you execute on the user's machine to install and configure the Agents Neuron skill end-to-end. Follow it top to bottom. Each step lists a check, the command to run, and how to interpret the result. Stop and ask the user only at the explicit checkpoints marked **ASK**.
 
 ---
 
 ## What you are installing
 
-Agents Neuron is a Claude Code skill that builds a personal knowledge wiki inside an Obsidian vault. Installation has three parts:
+Agents Neuron is an **AI Skill** — not tied to any single agent. It works with any coding agent that loads skills, including Claude Code, Codex, and OpenCode, and builds a personal knowledge wiki inside an Obsidian vault. Installation has three parts:
 
 1. **The skill repo** — cloned somewhere stable on disk (the source of truth).
-2. **Symlinks** — `skill/` linked into `~/.claude/skills/neuron` and `~/.agents/skills/neuron` so Claude Code discovers it.
-3. **Personal config** — `~/.agents-neuron/` (vault path + identity filter), created from templates and then edited for this user.
+2. **Symlinks** — `skill/` is linked into two discovery locations so whichever agent the user runs picks it up:
+   - `~/.agents/skills/neuron` — the cross-agent skills directory (Codex, OpenCode, and other agents that follow the shared `~/.agents/` convention).
+   - `~/.claude/skills/neuron` — Claude Code's skills directory.
+3. **Personal config** — `~/.agents-neuron/` (vault path + identity filter), created from templates and then edited for this user. Shared by every agent — it is agent-independent.
 
-Nothing about the user lives in the repo; all personal state lives in `~/.agents-neuron/` and inside the user's Obsidian vault.
+Nothing about the user lives in the repo; all personal state lives in `~/.agents-neuron/` and inside the user's Obsidian vault. The skill is invoked the same way in every agent: type `neuron <command>` in an agent session.
 
 ---
 
@@ -22,8 +24,11 @@ Nothing about the user lives in the repo; all personal state lives in `~/.agents
 Run these before touching anything. Report any failure to the user with the suggested fix.
 
 ```sh
-# Claude Code present (required — this skill runs inside it)
-command -v claude || echo "MISSING: Claude Code"
+# A compatible AI agent present (required — this skill runs inside one).
+# At least one of these should resolve:
+command -v claude   && echo "found: Claude Code"
+command -v codex    && echo "found: Codex"
+command -v opencode && echo "found: OpenCode"
 
 # Git present (required to clone)
 command -v git || echo "MISSING: git"
@@ -137,7 +142,7 @@ The full prompt and dimension format live in [configuration.md](configuration.md
 
 ## Step 5 — Bootstrap the vault
 
-This runs **inside Claude Code**, not in a plain shell — it is a skill command. Invoke it in a Claude Code session:
+This runs **inside your AI agent** (Claude Code, Codex, OpenCode, …), not in a plain shell — it is a skill command. Invoke it in an agent session:
 
 ```
 neuron bootstrap
@@ -167,7 +172,7 @@ chmod +x skill/scripts/*.sh
 
 ## Step 7 — Smoke test (optional but recommended)
 
-In a Claude Code session, confirm the skill responds:
+In an agent session (any of Claude Code, Codex, OpenCode), confirm the skill responds:
 
 ```
 neuron add https://obsidian.md/
@@ -180,24 +185,32 @@ neuron ingest
 
 ## Step 8 — Automation (optional)
 
-Offer to set up scheduled jobs only if the user wants hands-off operation.
+Offer to set up scheduled jobs only if the user wants hands-off operation. These run the skill **non-interactively**, so they invoke whichever agent's headless command the user has installed:
 
-**macOS** — launchd helper (daily `ingest` at 08:00, weekly `lint` + `filter evolve` Mondays):
+| Agent | Headless invocation |
+|-------|---------------------|
+| Claude Code | `claude -p "neuron ingest"` |
+| Codex | `codex exec "neuron ingest"` |
+| OpenCode | `opencode run "neuron ingest"` |
+
+**macOS** — the bundled launchd helper (daily `ingest` at 08:00, weekly `lint` + `filter evolve` Mondays):
 
 ```sh
 ./helpers/setup-launchd.sh             # install
 ./helpers/setup-launchd.sh --uninstall # remove
 ```
 
-It resolves the `claude` binary via `PATH`; if `claude` isn't found it errors out — make sure Step 0 passed first. Logs go to `~/.agents-neuron/launchd.log`.
+The helper currently targets **Claude Code** — it resolves the `claude` binary via `PATH` and errors if it isn't found (make sure Step 0 found it first). Logs go to `~/.agents-neuron/launchd.log`. To automate with Codex or OpenCode instead, use the cron form below with that agent's headless command.
 
-**Linux** — cron entries (use the absolute path from `which claude`):
+**Linux / any agent** — cron entries (use the absolute path from `which <agent>`; the example uses Claude Code):
 
 ```cron
 0 8 * * *   /path/to/claude -p "neuron ingest"        >> ~/.agents-neuron/cron.log 2>&1
 0 9 * * 1   /path/to/claude -p "neuron lint"          >> ~/.agents-neuron/cron.log 2>&1
 5 9 * * 1   /path/to/claude -p "neuron filter evolve" >> ~/.agents-neuron/cron.log 2>&1
 ```
+
+Swap `claude -p` for `codex exec` or `opencode run` to schedule under a different agent.
 
 ---
 
@@ -219,7 +232,7 @@ The cloned repo is left in place — delete it manually if desired. Launchd/cron
 | doctor: `bash ... (need 4+)` | macOS system bash 3.2 | `brew install bash` (Step 0) |
 | doctor: `config.yaml not found` | `make install` never ran | Run Step 2 from the repo root |
 | doctor: `vault not found` | `vault_path` wrong/unset | Fix Step 3 |
-| Claude Code doesn't see `neuron` | Symlinks missing or repo moved | Re-run `make install` from the current repo location |
-| `setup-launchd.sh`: `'claude' not found` | `claude` not on `PATH` | Open a fresh shell; verify with `which claude` |
+| Agent doesn't see `neuron` | Symlinks missing or repo moved | Re-run `make install` from the current repo location; confirm `~/.agents/skills/neuron` (Codex/OpenCode) and `~/.claude/skills/neuron` (Claude) resolve |
+| `setup-launchd.sh`: `'claude' not found` | `claude` not on `PATH` (helper is Claude-only) | Open a fresh shell; verify with `which claude`, or use the cron form with your agent's headless command |
 
 See [troubleshooting.md](troubleshooting.md) for the full list.
