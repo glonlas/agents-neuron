@@ -21,3 +21,9 @@ page_types:
 tag_prefix: "agents-neuron"
 min_relevance_score: 0.4
 source_date_format: "YYYY-MM-DD"
+
+# Scheduled maintenance run automatically after `neuron add`, but only when due.
+# After an add, ingest runs at most once per this many hours, and filter evolve
+# at most once per this many days.
+auto_ingest_ttl_hours: 24
+auto_evolve_ttl_days: 7

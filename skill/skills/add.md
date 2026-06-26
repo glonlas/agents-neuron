@@ -86,6 +86,47 @@ After saving the source file:
 1. Confirm to the user: "Imported: `{source_path}` ({word_count} words)"
 2. Remind them: "Run `neuron ingest` to filter and create wiki pages from pending sources."
 
+## Scheduled Maintenance (TTL-gated)
+
+After the import (or batch import) is complete, run the daily ingest and weekly
+filter-evolve passes **automatically — but only when they are due**. Do NOT run
+them on every `neuron add`; the TTL gate below decides.
+
+### Step 1: Check what's due (one cheap call)
+
+Run the gate script once:
+```sh
+SKILL_DIR/scripts/auto-maintenance.sh check
+```
+
+It prints exactly two lines, e.g.:
+```
+INGEST=due
+EVOLVE=ok
+```
+Each value is `due` (TTL elapsed — run it), `never` (never run — run it), or
+`ok` (ran recently — skip). This is the only check; do not read timestamps or
+inspect other files yourself.
+
+### Step 2: Run what's due, in order
+
+If **both** are due, run ingest **first**, then evolve. Specifically:
+
+1. **If `INGEST` is `due` or `never`:**
+   - Read `SKILL_DIR/skills/ingest.md` and follow it to ingest pending sources.
+   - (The ingest skill records its own timestamp on completion.)
+
+2. **If `EVOLVE` is `due` or `never`:**
+   - Read `SKILL_DIR/skills/filter.md` and follow its **Evolution Mode** to run a
+     filter-evolve pass and present a proposal.
+   - (The filter skill records its own timestamp when the evolve pass runs.)
+
+If both are `ok`, do nothing further — just finish the import normally.
+
+Note: ingest and filter evolve are human-in-the-loop (evolve requires approval
+before applying). Running them here means presenting their normal output to the
+user; it does not bypass any approval step.
+
 ## Batch Import
 
 If the user provides multiple URLs or texts at once, import each one sequentially. Report a summary at the end:

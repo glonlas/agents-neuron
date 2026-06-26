@@ -10,6 +10,8 @@ All user-specific configuration lives in `~/.agents-neuron/` — **outside the r
 | `~/.agents-neuron/filter-identity.md` | Your identity prompt: who this wiki is for and what matters |
 | `~/.agents-neuron/query-log.md` | Query history, used by `neuron filter evolve` |
 | `~/.agents-neuron/last-scan` | Timestamp of last `neuron scan` run |
+| `~/.agents-neuron/last-ingest` | Timestamp of last `neuron ingest` run (drives the daily auto-ingest TTL) |
+| `~/.agents-neuron/last-evolve` | Timestamp of last `neuron filter evolve` pass (drives the weekly auto-evolve TTL) |
 
 `make install` copies example templates from `schema/*.example.*` into `~/.agents-neuron/` on first run. Existing files are never overwritten.
 
@@ -38,7 +40,31 @@ page_types:
 
 tag_prefix: "agents-neuron"
 min_relevance_score: 0.4
+
+# Scheduled maintenance (runs automatically after `neuron add`, when due)
+auto_ingest_ttl_hours: 24   # ingest at most once per day
+auto_evolve_ttl_days: 7     # filter evolve at most once per week
 ```
+
+---
+
+## Scheduled maintenance after `neuron add`
+
+`neuron add` keeps the wiki current without you remembering to run things. After
+each import it makes one cheap TTL check (`scripts/auto-maintenance.sh check`)
+and then:
+
+- Runs `neuron ingest` if the last ingest was more than `auto_ingest_ttl_hours`
+  ago (default 24h) — so pending sources get turned into wiki pages **at least
+  once a day**, not on every add.
+- Runs a `neuron filter evolve` pass if the last one was more than
+  `auto_evolve_ttl_days` ago (default 7d) — so the filter is tuned **about once a
+  week**.
+
+If both are due, ingest runs first, then evolve. The timestamps live in
+`~/.agents-neuron/last-ingest` and `~/.agents-neuron/last-evolve`; running either
+command manually also resets its timer. Set the TTLs higher to run these less
+often, or lower to run them more aggressively.
 
 ---
 
