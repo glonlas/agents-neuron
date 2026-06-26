@@ -72,6 +72,8 @@ neuron lint              # find broken links, orphans, duplicates
 neuron filter evolve     # tune relevance weights based on actual usage
 ```
 
+See [Filter Weights](filter-weights.md) for how scoring works and exactly what `neuron filter evolve` proposes and changes.
+
 ---
 
 ## Recommended cadence

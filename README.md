@@ -86,6 +86,7 @@ Agents Neuron fetches the thread, scores it against your identity filter, and â€
 | [AI Install Guide](docs/ai-install.md) | Step-by-step runbook for an AI agent to install + configure Neuron on a user's machine |
 | [Commands](docs/commands.md) | Full command reference, daily usage patterns, recommended cadence |
 | [Configuration](docs/configuration.md) | config.yaml, identity filter setup, scoring dimensions |
+| [Filter Weights](docs/filter-weights.md) | How relevance scoring works and how `neuron filter evolve` re-tunes it |
 | [Architecture](docs/architecture.md) | File structure, scripts vs LLM split, page types, cross-platform support |
 | [Troubleshooting](docs/troubleshooting.md) | Common errors and doctor.sh |
 | [Contributing](CONTRIBUTING.md) | How to add skills, scripts, and submit PRs |
