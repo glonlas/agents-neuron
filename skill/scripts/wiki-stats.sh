@@ -33,7 +33,10 @@ while IFS= read -r ptype; do
     dir_name=$(_type_to_dir "$ptype")
     count=$(count_md "${WIKI}/${dir_name}")
     total_pages=$((total_pages + count))
-    echo "${ptype}s=${count}"
+    # Use the same pluralizer as the directory name (lowercased) so the key
+    # matches the documented output (entity → entities, not entitys).
+    key=$(printf '%s' "$dir_name" | tr '[:upper:]' '[:lower:]')
+    echo "${key}=${count}"
 done <<< "$PAGE_TYPES"
 echo "total_pages=${total_pages}"
 

@@ -71,7 +71,7 @@ Agents Neuron fetches the thread, scores it against your identity filter, and â€
 | Command | What it does |
 |---------|-------------|
 | `neuron scan` | Pull recently modified vault notes into the wiki |
-| `neuron add <url|text>` | Import a single source |
+| `neuron add <url\|text>` | Import a single source |
 | `neuron ingest` | Score pending sources, create wiki pages |
 | `neuron query <question>` | Answer from wiki with citations |
 | `neuron lint` | Health check |
