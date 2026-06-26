@@ -41,20 +41,17 @@ bash --version | head -1
 
 ## Step 1 — Locate or clone the repo
 
-First determine whether the repo is already on disk. Do **not** clone if it already exists.
+First determine whether the skill is already installed. Do **not** clone if it already exists. The install symlinks (`~/.claude/skills/neuron` and `~/.agents/skills/neuron`) point back to the repo, so checking them tells you both *whether* it's installed and *where* the repo lives:
 
 ```sh
-# Are we already inside the repo? (look for the skill marker)
-test -f skill/SKILL.md && grep -q "^name: neuron" skill/SKILL.md && echo "ALREADY IN REPO: $(pwd)"
-
-# Is it cloned elsewhere? Search under the home directory for the skill marker.
-# (Do not assume any particular folder layout — discover it.)
-find ~ -maxdepth 4 -type f -name SKILL.md -path "*/skill/SKILL.md" 2>/dev/null \
-  | xargs -I{} dirname {} | xargs -I{} dirname {}
+# If installed, this prints the repo's skill/ dir; the repo root is its parent.
+for link in ~/.claude/skills/neuron ~/.agents/skills/neuron; do
+  [ -e "$link" ] && echo "INSTALLED: $link -> $(readlink -f "$link" 2>/dev/null || readlink "$link")"
+done
 ```
 
-- **If found**, `cd` into the repo root (the directory containing the `Makefile` and `skill/`) and skip to Step 2.
-- **If not found**, clone it. Canonical remote:
+- **If a link resolves**, the repo is the parent of that `skill/` target — `cd` into it (the directory containing the `Makefile` and `skill/`) and skip to Step 2. It's already installed, so re-running `make install` later is harmless but optional.
+- **If nothing resolves** (not installed), clone it. Canonical remote:
 
 ```sh
 git clone https://github.com/glonlas/agents-neuron.git ~/agents-neuron
