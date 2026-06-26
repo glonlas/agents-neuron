@@ -66,29 +66,6 @@ Agents Neuron fetches the thread, scores it against your identity filter, and �
 
 ---
 
-## Automation
-
-**macOS (recommended)** — use the provided launchd helper:
-
-```sh
-./helpers/setup-launchd.sh           # install agents
-./helpers/setup-launchd.sh --uninstall  # remove them
-```
-
-Installs three agents: daily `neuron ingest` at 08:00, weekly `neuron lint` and `neuron filter evolve` on Mondays at 09:00. Logs to `~/.agents-neuron/launchd.log`.
-
-**Linux / cron** — add to your crontab with `crontab -e` (use the full path from `which claude`):
-
-```sh
-0 8 * * *   /path/to/claude -p "neuron ingest"        >> ~/.agents-neuron/cron.log 2>&1
-0 9 * * 1   /path/to/claude -p "neuron lint"          >> ~/.agents-neuron/cron.log 2>&1
-5 9 * * 1   /path/to/claude -p "neuron filter evolve" >> ~/.agents-neuron/cron.log 2>&1
-```
-
-Pair with `neuron scan` in your morning terminal session to pull overnight note changes.
-
----
-
 ## Quick reference
 
 | Command | What it does |
@@ -112,6 +89,29 @@ Pair with `neuron scan` in your morning terminal session to pull overnight note 
 | [Architecture](docs/architecture.md) | File structure, scripts vs LLM split, page types, cross-platform support |
 | [Troubleshooting](docs/troubleshooting.md) | Common errors and doctor.sh |
 | [Contributing](CONTRIBUTING.md) | How to add skills, scripts, and submit PRs |
+
+---
+
+## Automation
+
+**macOS (recommended)** — use the provided launchd helper:
+
+```sh
+./helpers/setup-launchd.sh           # install agents
+./helpers/setup-launchd.sh --uninstall  # remove them
+```
+
+Installs three agents: daily `neuron ingest` at 08:00, weekly `neuron lint` and `neuron filter evolve` on Mondays at 09:00. Logs to `~/.agents-neuron/launchd.log`.
+
+**Linux / cron** — add to your crontab with `crontab -e` (use the full path from `which claude`):
+
+```sh
+0 8 * * *   /path/to/claude -p "neuron ingest"        >> ~/.agents-neuron/cron.log 2>&1
+0 9 * * 1   /path/to/claude -p "neuron lint"          >> ~/.agents-neuron/cron.log 2>&1
+5 9 * * 1   /path/to/claude -p "neuron filter evolve" >> ~/.agents-neuron/cron.log 2>&1
+```
+
+Pair with `neuron scan` in your morning terminal session to pull overnight note changes.
 
 ---
 
