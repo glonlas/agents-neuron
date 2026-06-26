@@ -1,36 +1,38 @@
-# Agents Neuron
+# Neuron
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey.svg)]()
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-blueviolet.svg)]()
 
-A [Claude Code](https://claude.ai/code) skill that turns your reading into a personal, compounding knowledge wiki inside [Obsidian](https://obsidian.md/). Import anything — URLs, notes, pasted text — and Agents Neuron filters it through your identity profile, keeps only what matters, and builds structured wiki pages with full source traceability.
-
-Supports **multiple Obsidian vaults** as sources (e.g. a personal vault and a work vault) — Agents Neuron scans all of them and writes everything into one unified wiki.
-
-```
-Sources (URLs, notes, text)  →  neuron add   →  raw sources (immutable)
-                                    ↓
-                             neuron ingest  →  score against identity filter
-                                              below threshold → archived
-                                              above threshold → wiki page
-                                    ↓
-                             neuron query   →  answers with citations
-                             neuron lint    →  health checks
-                             neuron filter  →  evolve relevance over time
-```
-
-Inspired by [Karpathy's original write-up](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) and [Baljanak's learning filter](https://gist.github.com/baljanak/f233d3e321d353d34f2f6663369b3105). Built from scratch.
+**Your AI reads everything you save, keeps only what matters to you, and turns it into a personal wiki that gets smarter over time.**
 
 ---
 
-## Getting started
+## The problem
 
-**Prerequisites:** an AI coding agent (Claude Code, Codex, or OpenCode) on macOS or Linux
+You read a lot. Articles, threads, docs, your own notes.
 
-### Install with your AI agent (recommended)
+You forget almost all of it.
 
-Paste this prompt into Claude Code, Codex, or OpenCode and let it install Neuron for you — it follows the [AI Install Guide](docs/ai-install.md) end to end (clone, symlink, config, bootstrap, validate):
+Note apps don't help. They just become a graveyard. The work of keeping notes linked, tidy, and findable is so tedious that everyone gives up. The knowledge never compounds.
+
+## The idea
+
+Let the AI do the boring part.
+
+You save things. Neuron's AI files them, links them, removes duplicates, and writes clean wiki pages, all inside your own [Obsidian](https://obsidian.md/) vault. The maintenance cost drops to zero, so your knowledge actually grows.
+
+One more thing makes it personal: **Neuron knows who you are.** It scores everything you save against *your* interests and goals. Important stuff becomes a wiki page. Noise stays out of the way. And the filter learns from what you actually use, so it gets sharper every week.
+
+> Same things go in. Only what matters to *you* comes out.
+
+---
+
+## Install it
+
+You don't install Neuron by hand. Your AI agent does it for you.
+
+Open your AI coding agent (Claude Code, Codex, or OpenCode) and paste this:
 
 ```text
 Install the Agents Neuron skill for me. Clone https://github.com/glonlas/agents-neuron
@@ -39,87 +41,63 @@ step by step on this machine. Ask me for my Obsidian vault path when you reach t
 and run the doctor script at the end to confirm the install succeeded.
 ```
 
-The agent will pause to ask for your Obsidian vault path; everything else is automated.
+It handles everything: clone, setup, config, and a final check. It pauses once to ask for your Obsidian vault path. Two minutes, done.
 
-### Install manually
-
-```sh
-git clone https://github.com/glonlas/agents-neuron.git && cd agents-neuron
-make install                        # symlinks + seed ~/.agents-neuron/ config
-# Edit ~/.agents-neuron/config.yaml # set vault_path
-neuron bootstrap                      # run in your AI agent to init vault
-```
-
-Validate: `skill/scripts/doctor.sh` | Uninstall: `make uninstall`
+> Prefer to do it yourself? The full steps live in the [AI Install Guide](docs/ai-install.md).
 
 ---
 
-## Example
+## The four things you'll actually use
 
-```
-# In Claude Code
-neuron add https://www.reddit.com/r/LocalLLaMA/comments/1s49lvh/gguf_llamacpp_vs_mlx_round_2_your_feedback_tested/
-neuron ingest
-```
-
-Agents Neuron fetches the thread, scores it against your identity filter, and — if it clears your relevance threshold — creates a structured wiki page (e.g. `Neuron/Comparisons/GGUF llama.cpp vs MLX.md`) with inline citations back to the source.
-
----
-
-## Quick reference
+Type these to your AI agent in plain English.
 
 | Command | What it does |
-|---------|-------------|
-| `neuron scan` | Pull recently modified vault notes into the wiki |
-| `neuron add <url\|text>` | Import a single source |
-| `neuron ingest` | Score pending sources, create wiki pages |
-| `neuron query <question>` | Answer from wiki with citations |
-| `neuron lint` | Health check |
-| `neuron filter evolve` | Tune relevance weights from usage patterns |
+|---------|--------------|
+| `neuron add <url\|text>` | Save anything: a link, a note, pasted text. |
+| `neuron ingest` | Turn what you saved into wiki pages. Keeps what matters to you, archives the rest. |
+| `neuron lint` | Monthly health check. Catches broken links, duplicates, and stale pages. |
+| `neuron filter evolve` | Monthly tune-up. Sharpens what Neuron keeps, based on what you actually use. |
+
+That's the whole loop: **add → ingest**, and once a month **lint + filter evolve**.
 
 ---
 
-## Documentation
+## Ask it anything
 
-| Doc | Contents |
-|-----|----------|
-| [AI Install Guide](docs/ai-install.md) | Step-by-step runbook for an AI agent to install + configure Neuron on a user's machine |
-| [Commands](docs/commands.md) | Full command reference, daily usage patterns, recommended cadence |
-| [Configuration](docs/configuration.md) | config.yaml, identity filter setup, scoring dimensions |
-| [Filter Weights](docs/filter-weights.md) | How relevance scoring works and how `neuron filter evolve` re-tunes it |
-| [Architecture](docs/architecture.md) | File structure, scripts vs LLM split, page types, cross-platform support |
-| [Troubleshooting](docs/troubleshooting.md) | Common errors and doctor.sh |
-| [Contributing](CONTRIBUTING.md) | How to add skills, scripts, and submit PRs |
+Once your wiki has content, ask questions and get answers that link back to where you read it:
+
+```
+neuron query what have I saved about sleep and focus?
+```
 
 ---
 
-## Automation
+## Want it on autopilot?
 
-**macOS (recommended)** — use the provided launchd helper:
+Neuron can run on a schedule: ingest your reading every morning, tidy up and sharpen the filter every week. See [Commands](docs/commands.md) for the one-line setup.
 
-```sh
-./helpers/setup-launchd.sh           # install agents
-./helpers/setup-launchd.sh --uninstall  # remove them
-```
+---
 
-Installs three agents: daily `neuron ingest` at 08:00, weekly `neuron lint` and `neuron filter evolve` on Mondays at 09:00. Logs to `~/.agents-neuron/launchd.log`.
+## Learn more
 
-**Linux / cron** — add to your crontab with `crontab -e` (use the full path from `which claude`):
-
-```sh
-0 8 * * *   /path/to/claude -p "neuron ingest"        >> ~/.agents-neuron/cron.log 2>&1
-0 9 * * 1   /path/to/claude -p "neuron lint"          >> ~/.agents-neuron/cron.log 2>&1
-5 9 * * 1   /path/to/claude -p "neuron filter evolve" >> ~/.agents-neuron/cron.log 2>&1
-```
-
-Pair with `neuron scan` in your morning terminal session to pull overnight note changes.
+| Doc | What's inside |
+|-----|---------------|
+| [AI Install Guide](docs/ai-install.md) | The step-by-step runbook your AI agent follows to install Neuron |
+| [Commands](docs/commands.md) | Every command, daily routines, automation |
+| [Configuration](docs/configuration.md) | Your vault, your identity filter, scoring |
+| [Filter Weights](docs/filter-weights.md) | How scoring works and how `neuron filter evolve` re-tunes it |
+| [Architecture](docs/architecture.md) | How it works under the hood |
+| [Troubleshooting](docs/troubleshooting.md) | When something breaks |
+| [Contributing](CONTRIBUTING.md) | Add to the project |
 
 ---
 
 ## Credits
 
-- [Andrej Karpathy](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — the original personal knowledge wiki concept
-- [Baljanak](https://gist.github.com/baljanak/f233d3e321d353d34f2f6663369b3105) — identity-aware learning filter
+Built on two great ideas:
+
+- [Andrej Karpathy](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f): the personal wiki the AI maintains for you
+- [Baljanak](https://gist.github.com/baljanak/f233d3e321d353d34f2f6663369b3105): the filter that knows who you are and learns over time
 
 ## License
 

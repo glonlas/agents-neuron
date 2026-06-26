@@ -8,7 +8,7 @@ Thanks for your interest in contributing. Here's what you need to know.
 git clone https://github.com/glonlas/neuron.git
 cd neuron
 make install
-# Edit ~/.agents-neuron/config.yaml — set vault_path to a test Obsidian vault
+# Edit ~/.agents-neuron/config.yaml to set vault_path to a test Obsidian vault
 # Run: neuron bootstrap (in Claude Code)
 ```
 
@@ -37,7 +37,7 @@ User-specific configuration lives in `~/.agents-neuron/` (outside the repo).
 
 1. Source `_config.sh` at the top for paths and portable helpers
 2. Use `set -euo pipefail`
-3. Use `SED_INPLACE`, `portable_date_ago`, etc. — never use platform-specific commands directly
+3. Use `SED_INPLACE`, `portable_date_ago`, etc. Never use platform-specific commands directly
 4. Output tab-separated or `key=value` format for LLM consumption
 5. Quote all path variables (vault paths may contain spaces)
 

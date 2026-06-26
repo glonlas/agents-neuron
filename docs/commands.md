@@ -28,7 +28,7 @@ Run this each morning or after a writing session to pull your own vault notes in
 neuron scan
 ```
 
-It finds every note modified since the last scan, shows you the list, asks for confirmation, then imports and ingests them. Notes that score below your relevance threshold are skipped — only what actually matters to you becomes a wiki page.
+It finds every note modified since the last scan, shows you the list, asks for confirmation, then imports and ingests them. Notes that score below your relevance threshold are skipped. Only what actually matters to you becomes a wiki page.
 
 First run (no prior scan): defaults to the last 7 days. Override with:
 
@@ -40,7 +40,7 @@ neuron scan --all        # entire vault, use once on first setup
 
 ### External content → wiki (as needed)
 
-When you read something worth keeping — an article, a thread, a doc:
+When you read something worth keeping, like an article, a thread, a doc:
 
 ```
 neuron add https://some-article.com

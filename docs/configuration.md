@@ -1,6 +1,6 @@
 # Configuration
 
-All user-specific configuration lives in `~/.agents-neuron/` — **outside the repo**. This keeps the skill reusable and shareable.
+All user-specific configuration lives in `~/.agents-neuron/` (**outside the repo**). This keeps the skill reusable and shareable.
 
 ## Config files
 
@@ -55,10 +55,10 @@ each import it makes one cheap TTL check (`scripts/auto-maintenance.sh check`)
 and then:
 
 - Runs `neuron ingest` if the last ingest was more than `auto_ingest_ttl_hours`
-  ago (default 24h) — so pending sources get turned into wiki pages **at least
+  ago (default 24h), so pending sources get turned into wiki pages **at least
   once a day**, not on every add.
 - Runs a `neuron filter evolve` pass if the last one was more than
-  `auto_evolve_ttl_days` ago (default 7d) — so the filter is tuned **about once a
+  `auto_evolve_ttl_days` ago (default 7d), so the filter is tuned **about once a
   week**.
 
 If both are due, ingest runs first, then evolve. The timestamps live in
@@ -75,8 +75,8 @@ often, or lower to run them more aggressively.
 The fastest way to seed a personalized `filter-identity.md` is to ask an LLM what it already knows about you from your conversation history. Paste this prompt into ChatGPT (or any LLM you've been talking to):
 
 ```
-Based on everything you know about me from our conversations — my job, projects,
-interests, goals, and the topics I regularly ask about — please generate a
+Based on everything you know about me from our conversations (my job, projects,
+interests, goals, and the topics I regularly ask about), please generate a
 filter-identity.md file for my personal Agents Neuron wiki.
 
 Be specific and honest. The more precise the identity, the sharper the filtering.
@@ -111,6 +111,6 @@ Save the output to `~/.agents-neuron/filter-identity.md`. Alternatively, `neuron
 
 ### How the filter works
 
-The filter defines scoring dimensions and weights. Each source is scored 0-1 against each dimension; the weighted sum is compared against a minimum threshold (default: 0.4). Sources below the threshold are marked ingested but don't get wiki pages — they stay in `Neuron-Sources/` for reference without cluttering the wiki.
+The filter defines scoring dimensions and weights. Each source is scored 0-1 against each dimension; the weighted sum is compared against a minimum threshold (default: 0.4). Sources below the threshold are marked ingested but don't get wiki pages. They stay in `Neuron-Sources/` for reference without cluttering the wiki.
 
-Run `neuron filter evolve` periodically to tune weights based on what you actually query and link to. All filter changes require your approval and apply to future ingests only — existing pages are never retroactively removed.
+Run `neuron filter evolve` periodically to tune weights based on what you actually query and link to. All filter changes require your approval and apply to future ingests only. Existing pages are never retroactively removed.

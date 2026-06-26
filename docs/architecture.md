@@ -4,8 +4,8 @@
 
 Neuron splits work into two layers:
 
-- **Scripts** (`scripts/*.sh`) handle deterministic operations — file finding, metadata updates, lint checks. These are predictable, fast, and save LLM tokens.
-- **Skills** (`skills/*.md`) handle semantic operations — scoring relevance, synthesizing pages, answering queries. These require comprehension and judgment.
+- **Scripts** (`scripts/*.sh`) handle deterministic operations: file finding, metadata updates, lint checks. These are predictable, fast, and save LLM tokens.
+- **Skills** (`skills/*.md`) handle semantic operations: scoring relevance, synthesizing pages, answering queries. These require comprehension and judgment.
 
 `SKILL.md` is the router that dispatches user commands to the appropriate sub-skill.
 
@@ -32,7 +32,7 @@ neuron/
 │   ├── filter-identity.example.md
 │   └── query-log.example.md
 └── skill/                           # Claude Code skill (symlinked as "neuron")
-    ├── SKILL.md                     # Router — dispatches all neuron commands
+    ├── SKILL.md                     # Router, dispatches all neuron commands
     ├── skills/
     │   ├── bootstrap.md             # One-time vault initialization
     │   ├── scan.md                  # Daily vault scan → import → ingest

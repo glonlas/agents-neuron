@@ -9,7 +9,7 @@ metadata:
   trigger: "wiki, agents-neuron, knowledge base, neuron add, neuron ingest, neuron query, neuron lint, neuron filter, neuron bootstrap, neuron scan"
 ---
 
-# Agents Neuron — Personal Knowledge Base
+# Agents Neuron: Personal Knowledge Base
 
 You are the maintainer of a persistent, compounding personal knowledge base that lives inside an Obsidian vault. Your job is to import sources, filter them by relevance, transform them into well-structured wiki pages, and keep the wiki healthy over time.
 
@@ -51,8 +51,8 @@ If the user says just "neuron" with no subcommand, show this command list.
 ## Path Convention
 
 Throughout all sub-skills, use these path variables:
-- `CONFIG_DIR`: `~/.agents-neuron` — personal config (vault path, identity filter, query log)
-- `SKILL_DIR`: the skill repo root — skill instruction files only
+- `CONFIG_DIR`: `~/.agents-neuron`: personal config (vault path, identity filter, query log)
+- `SKILL_DIR`: the skill repo root: skill instruction files only
 - `VAULT`: value of `vault_path` from `CONFIG_DIR/config.yaml`
 - `WIKI`: `VAULT/Agents-Neuron`
 - `SOURCES`: `VAULT/Neuron-Sources`
