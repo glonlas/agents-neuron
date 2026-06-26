@@ -37,8 +37,6 @@ command -v git || echo "MISSING: git"
 bash --version | head -1
 ```
 
-**On the shell:** the user's login shell (zsh on every modern Mac) does **not** matter here. Neuron's scripts are bash scripts (`#!/usr/bin/env bash`) — they run under bash via their own shebang regardless of the interactive shell, so there is nothing to switch and nothing to install. macOS ships `/bin/bash` 3.2, and the scripts use no bash 4+ features (only indexed arrays), so the preinstalled bash is sufficient. Do **not** tell the user to `brew install bash` — it's unnecessary.
-
 ---
 
 ## Step 1 — Locate or clone the repo
