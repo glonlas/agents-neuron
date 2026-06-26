@@ -62,6 +62,29 @@ assert_no_match "same-file heading link is not flagged" \
 assert_match "genuinely missing target is still flagged" \
     "Does Not Exist" "$OUT"
 
+# Page whose only frontmatter problem is an EMPTY array field sitting directly
+# above the closing "---". The empty field must be reported as missing — it must
+# not be mistaken for a populated YAML list (the "---" line matches /^ *-/).
+cat > "${WIKI}/Empty Tags.md" <<'EOF'
+---
+title: "Empty Tags"
+type: concept
+created: 2026-01-01
+updated: 2026-01-01
+sources:
+  - "[[Agents-Neuron/Concepts/Other Page]]"
+tags:
+---
+Body.
+EOF
+
+echo ""
+echo "lint-checks: empty array field before closing delimiter"
+OUT="$(HOME="${SANDBOX}/home" bash "$LINT" frontmatter 2>&1)"
+
+assert_match "empty 'tags:' before '---' is flagged as missing" \
+    "Empty Tags.md	missing: tags" "$OUT"
+
 # --- Summary ---
 echo ""
 printf "  %d passed, %d failed\n" "$pass" "$fail"

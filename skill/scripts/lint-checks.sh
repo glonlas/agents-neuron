@@ -52,7 +52,10 @@ fm_value() {
                 val = $0
                 sub("^" field ": *", "", val)
                 if (val != "") { print val; exit }
-                if ((getline nextline) > 0 && nextline ~ /^ *-/) print "(array)"
+                # Empty inline value: peek at the next line for a YAML list item.
+                # Exclude the closing "---" delimiter, which also matches /^ *-/
+                # but means the field is genuinely empty, not an array.
+                if ((getline nextline) > 0 && nextline ~ /^ *-/ && nextline !~ /^---$/) print "(array)"
                 exit
             }
         }
