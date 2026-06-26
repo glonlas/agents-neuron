@@ -8,30 +8,8 @@ set -uo pipefail
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 LINT="${REPO_DIR}/skill/scripts/lint-checks.sh"
 
-pass=0
-fail=0
-
-# assert_no_match <description> <pattern> <output>
-assert_no_match() {
-    if printf '%s\n' "$3" | grep -qF "$2"; then
-        echo "  FAIL $1 (unexpectedly found: $2)"
-        fail=$((fail + 1))
-    else
-        echo "  OK   $1"
-        pass=$((pass + 1))
-    fi
-}
-
-# assert_match <description> <pattern> <output>
-assert_match() {
-    if printf '%s\n' "$3" | grep -qF "$2"; then
-        echo "  OK   $1"
-        pass=$((pass + 1))
-    else
-        echo "  FAIL $1 (expected to find: $2)"
-        fail=$((fail + 1))
-    fi
-}
+# shellcheck source=tests/_helpers.sh
+source "${REPO_DIR}/tests/_helpers.sh"
 
 # --- Build a sandbox vault ---
 SANDBOX="$(mktemp -d)"
