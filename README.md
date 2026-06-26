@@ -26,7 +26,7 @@ Inspired by [Karpathy's original write-up](https://gist.github.com/karpathy/442a
 
 ## Getting started
 
-**Prerequisites:** an AI coding agent (Claude Code, Codex, or OpenCode), Bash 3.2+ (preinstalled on macOS)
+**Prerequisites:** an AI coding agent (Claude Code, Codex, or OpenCode) on macOS or Linux
 
 ### Install with your AI agent (recommended)
 
