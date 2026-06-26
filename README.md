@@ -26,7 +26,7 @@ Inspired by [Karpathy's original write-up](https://gist.github.com/karpathy/442a
 
 ## Getting started
 
-**Prerequisites:** [Claude Code](https://claude.ai/code), Bash 4+
+**Prerequisites:** an AI coding agent (Claude Code, Codex, or OpenCode), Bash 3.2+ (preinstalled on macOS)
 
 ```sh
 git clone https://github.com/glonlas/neuron.git && cd neuron

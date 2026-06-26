@@ -33,17 +33,11 @@ command -v opencode && echo "found: OpenCode"
 # Git present (required to clone)
 command -v git || echo "MISSING: git"
 
-# Bash 4+ (required — macOS ships 3.2 by default)
-bash -c 'echo "bash ${BASH_VERSINFO[0]}.x"; [ "${BASH_VERSINFO[0]}" -ge 4 ] || echo "TOO OLD"'
+# Bash present (3.2+ — the version macOS preinstalls is enough)
+bash --version | head -1
 ```
 
-**Bash gotcha (macOS):** the system `/bin/bash` is 3.2. If the check prints `TOO OLD`, install a modern bash and ensure it is first on `PATH`:
-
-```sh
-brew install bash      # installs bash 5 at $(brew --prefix)/bin/bash
-```
-
-Homebrew's bash lands in `PATH` ahead of `/bin/bash` for new shells; the Neuron scripts use `#!/usr/bin/env bash`, so they pick it up automatically. No need to change the system shell.
+**On the shell:** the user's login shell (zsh on every modern Mac) does **not** matter here. Neuron's scripts are bash scripts (`#!/usr/bin/env bash`) — they run under bash via their own shebang regardless of the interactive shell, so there is nothing to switch and nothing to install. macOS ships `/bin/bash` 3.2, and the scripts use no bash 4+ features (only indexed arrays), so the preinstalled bash is sufficient. Do **not** tell the user to `brew install bash` — it's unnecessary.
 
 ---
 
@@ -229,7 +223,7 @@ The cloned repo is left in place — delete it manually if desired. Launchd/cron
 | Symptom | Cause | Fix |
 |---------|-------|-----|
 | `make: command not found` | No `make` | Install build tools (`xcode-select --install` on macOS) |
-| doctor: `bash ... (need 4+)` | macOS system bash 3.2 | `brew install bash` (Step 0) |
+| doctor: `bash ... (need 3.2+)` | No bash on `PATH` (very unusual) | macOS preinstalls `/bin/bash`; ensure `PATH` includes `/bin` |
 | doctor: `config.yaml not found` | `make install` never ran | Run Step 2 from the repo root |
 | doctor: `vault not found` | `vault_path` wrong/unset | Fix Step 3 |
 | Agent doesn't see `neuron` | Symlinks missing or repo moved | Re-run `make install` from the current repo location; confirm `~/.agents/skills/neuron` (Codex/OpenCode) and `~/.claude/skills/neuron` (Claude) resolve |

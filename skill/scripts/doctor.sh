@@ -26,10 +26,13 @@ echo ""
 # --- Bash version ---
 echo "Environment:"
 bash_major="${BASH_VERSINFO[0]:-0}"
-if [ "$bash_major" -ge 4 ]; then
+bash_minor="${BASH_VERSINFO[1]:-0}"
+# Scripts use only indexed arrays and POSIX-ish constructs — bash 3.2
+# (preinstalled on macOS) is sufficient. No bash 4+ features are used.
+if [ "$bash_major" -gt 3 ] || { [ "$bash_major" -eq 3 ] && [ "$bash_minor" -ge 2 ]; }; then
     ok "bash ${BASH_VERSION}"
 else
-    fail "bash ${BASH_VERSION} (need 4+)"
+    fail "bash ${BASH_VERSION} (need 3.2+)"
 fi
 
 # --- Config ---
