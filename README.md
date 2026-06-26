@@ -28,11 +28,26 @@ Inspired by [Karpathy's original write-up](https://gist.github.com/karpathy/442a
 
 **Prerequisites:** an AI coding agent (Claude Code, Codex, or OpenCode), Bash 3.2+ (preinstalled on macOS)
 
+### Install with your AI agent (recommended)
+
+Paste this prompt into Claude Code, Codex, or OpenCode and let it install Neuron for you — it follows the [AI Install Guide](docs/ai-install.md) end to end (clone, symlink, config, bootstrap, validate):
+
+```text
+Install the Agents Neuron skill for me. Clone https://github.com/glonlas/agents-neuron
+(skip if it's already on disk), then read its docs/ai-install.md and follow that runbook
+step by step on this machine. Ask me for my Obsidian vault path when you reach that step,
+and run the doctor script at the end to confirm the install succeeded.
+```
+
+The agent will pause to ask for your Obsidian vault path; everything else is automated.
+
+### Install manually
+
 ```sh
-git clone https://github.com/glonlas/neuron.git && cd neuron
+git clone https://github.com/glonlas/agents-neuron.git && cd agents-neuron
 make install                        # symlinks + seed ~/.agents-neuron/ config
 # Edit ~/.agents-neuron/config.yaml # set vault_path
-neuron bootstrap                      # run in Claude Code to init vault
+neuron bootstrap                      # run in your AI agent to init vault
 ```
 
 Validate: `skill/scripts/doctor.sh` | Uninstall: `make uninstall`
